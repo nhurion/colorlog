@@ -16,17 +16,17 @@ Usage: #{executable_name} [options] filename
 "
 
   options[:green] = "success"
-  opts.on('-g RegExp','RegExp that matched will turn the line green') do |green|
+  opts.on('-g RegExp', 'RegExp that matched will turn the line green') do |green|
     options[:green] = green
   end
 
   options[:yellow] = "warning"
-  opts.on('-y RegExp','RegExp that matched will turn the line yellow') do |yellow|
+  opts.on('-y RegExp', 'RegExp that matched will turn the line yellow') do |yellow|
     options[:yellow] = yellow
   end
 
   options[:red] = "failure|error"
-  opts.on('-r RedExp','RegExp that matched will turn the line red') do |red|
+  opts.on('-r RedExp', 'RegExp that matched will turn the line red') do |red|
     options[:red] = red
   end
 
@@ -44,9 +44,11 @@ ARGF.each do |line|
 
   if line =~ success_check
     color = :green
-  elsif  line =~ warning_check
+  end
+  if  line =~ warning_check
     color = :yellow
-  elsif  line =~ error_check
+  end
+  if  line =~ error_check
     color = :red
   end
   printf("%s".foreground(color), line)
