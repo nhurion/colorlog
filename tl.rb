@@ -16,17 +16,17 @@ Usage: #{executable_name} [options] filename
 "
 
   options[:green] = "success"
-  opts.on('-g RegExp', 'RegExp that matched will turn the line green') do |green|
+  opts.on('-g', '--green RegExp', 'RegExp that matched will turn the line green') do |green|
     options[:green] = green
   end
 
   options[:yellow] = "warning"
-  opts.on('-y RegExp', 'RegExp that matched will turn the line yellow') do |yellow|
+  opts.on('-y','--yellow RegExp', 'RegExp that matched will turn the line yellow') do |yellow|
     options[:yellow] = yellow
   end
 
   options[:red] = "failure|error"
-  opts.on('-r RedExp', 'RegExp that matched will turn the line red') do |red|
+  opts.on('-r', '--red RedExp', 'RegExp that matched will turn the line red') do |red|
     options[:red] = red
   end
 
