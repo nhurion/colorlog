@@ -25,7 +25,7 @@ Usage: #{executable_name} [options] filename
     options[:yellow] = yellow
   end
 
-  options[:red] = "failure|error"
+  options[:red] = /^(?:(?!\bTests\b).)*(?:failure|error).*$/i
   opts.on('-r', '--red RedExp', 'RegExp that matched will turn the line red') do |red|
     options[:red] = red
   end
@@ -36,7 +36,7 @@ option_parser.parse!
 
 success_check = Regexp.new(options[:green], Regexp::IGNORECASE)
 warning_check = Regexp.new(options[:yellow], Regexp::IGNORECASE)
-error_check = Regexp.new(options[:red], Regexp::IGNORECASE)
+error_check = Regexp.new(options[:red])
 
 ARGF.each do |line|
 
