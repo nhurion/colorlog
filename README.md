@@ -14,3 +14,14 @@ My initial need when I created this small tool was to spot warnings in the middl
 Example usage:
 
     mvn clean install | tl.rb
+    
+Windows
+-------
+
+Install [ruby](http://rubyinstaller.org/)
+
+Once installed
+
+    gem install windows-pr win32console
+    
+To have color
