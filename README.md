@@ -24,4 +24,14 @@ Once installed
 
     gem install windows-pr win32console
     
-To have color
+To have colors
+
+Then, create somewhere in your path, atl.bat file with content:
+
+@echo off
+ruby c:/path/to/script/tl.rb %*
+
+You can then use
+
+    mvn clean install | tl
+    
