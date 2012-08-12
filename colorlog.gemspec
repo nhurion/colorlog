@@ -5,10 +5,9 @@ Gem::Specification.new do |s|
   s.version     = ColorLog::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Nicolas Hurion"]
-  s.email       = ["nicolas at hurion.eu"]
   s.homepage    = "https://github.com/nhurion/colorlog"
   s.summary     = %q{An helper to color logs based on regexp}
-  s.description = %q{colorlog allow you to read a file with sone lines colored in red, green and yellow based on regexp}
+  s.description = %q{colorlog allow you to read a file with some lines colored in red, green and yellow based on regexp}
 
   s.files       = ["bin/colorlog"]
   s.executables = ["colorlog"]
