@@ -34,11 +34,11 @@ end
 
 option_parser.parse!
 
-success_check = Regexp.new(options[:green], Regexp::IGNORECASE)
-warning_check = Regexp.new(options[:yellow], Regexp::IGNORECASE)
-error_check = Regexp.new(options[:red])
+def color_print(line, options)
 
-ARGF.each do |line|
+  success_check = Regexp.new(options[:green], Regexp::IGNORECASE)
+  warning_check = Regexp.new(options[:yellow], Regexp::IGNORECASE)
+  error_check = Regexp.new(options[:red])
 
   color = :default
 
@@ -52,4 +52,24 @@ ARGF.each do |line|
     color = :red
   end
   printf("%s".foreground(color), line)
+
+end
+
+filename = ARGV.shift
+
+if (filename.nil?)
+  if STDIN.tty?
+    puts "You should provide a file"
+    exit 1
+  end
+
+  ARGF.each do |line|
+    color_print(line,options)
+  end
+else
+  File.open(File.expand_path(filename), 'r') do |file|
+    file.readlines.each do |line|
+      color_print(line,options)
+    end
+  end
 end

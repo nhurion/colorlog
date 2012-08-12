@@ -1,9 +1,8 @@
-$LOAD_PATH.push File.expand_path("../lib",__FILE__)
-require "colorlog_version"
+require File.join([File.dirname(__FILE__),'lib','colorlog_version.rb'])
 
 Gem::Specification.new do |s|
   s.name        = "colorlog"
-  s.version     = "0.0.1"
+  s.version     = ColorLog::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Nicolas Hurion"]
   s.email       = ["nicolas at hurion.eu"]
@@ -13,5 +12,8 @@ Gem::Specification.new do |s|
 
   s.files       = ["bin/colorlog"]
   s.executables = ["colorlog"]
+
   s.add_dependency("rainbow")
+  s.add_development_dependency("rake", "~> 0.9.2")
+  s.add_development_dependency("rdoc", "~> 3.12")
 end
