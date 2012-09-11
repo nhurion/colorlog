@@ -15,19 +15,19 @@ Usage: #{executable_name} [options] filename
 
 "
 
-  options[:green] = /success/i
-  opts.on('-g', '--green RegExp', 'RegExp that matched will turn the line green') do |green|
-    options[:green] = green
+  options[:success] = /success/i
+  opts.on('-s', '--success RegExp', Regexp, 'RegExp that matched will turn the line green  (default ' + options[:success].inspect + ')') do |success|
+    options[:success] = success
   end
 
-  options[:yellow] = /warning/i
-  opts.on('-y','--yellow RegExp', 'RegExp that matched will turn the line yellow') do |yellow|
-    options[:yellow] = yellow
+  options[:warning] = /warning/i
+  opts.on('-w', '--warning RegExp', Regexp, 'RegExp that matched will turn the line yellow (default ' + options[:warning].inspect + ')') do |warning|
+    options[:warning] = warning
   end
 
-  options[:red] = /^(?:(?!\bTests\b).)*(?:failure|error).*$/i
-  opts.on('-r', '--red RedExp', 'RegExp that matched will turn the line red') do |red|
-    options[:red] = red
+  options[:error] = /^(?:(?!\bTests\b).)*(?:failure|error).*$/i
+  opts.on('-e', '--error RedExp', Regexp, 'RegExp that matched will turn the line red    (default ' + options[:error].inspect + ')') do |error|
+    options[:error] = error
   end
 
 end
@@ -36,9 +36,9 @@ option_parser.parse!
 
 def color_print(line, options)
 
-  success_check = Regexp.new(options[:green])
-  warning_check = Regexp.new(options[:yellow])
-  error_check = Regexp.new(options[:red])
+  success_check = Regexp.new(options[:success])
+  warning_check = Regexp.new(options[:warning])
+  error_check = Regexp.new(options[:error])
 
   color = :default
 
@@ -57,19 +57,19 @@ end
 
 filename = ARGV.shift
 
-if (filename.nil?)
+if filename.nil?
   if STDIN.tty?
     puts "You should provide a file"
     exit 1
   end
 
   ARGF.each do |line|
-    color_print(line,options)
+    color_print(line, options)
   end
 else
   File.open(File.expand_path(filename), 'r') do |file|
     file.readlines.each do |line|
-      color_print(line,options)
+      color_print(line, options)
     end
   end
 end

@@ -15,6 +15,7 @@ Default behavior will show in:
 * red lines containing "error" or "failure" and not containing "tests"
 
 My initial need when I created this small tool was to spot warnings in the middle of all the output of maven.
+This should explain the default Regexp used.
 
 Example usage:
 
