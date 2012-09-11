@@ -19,22 +19,17 @@ My initial need when I created this small tool was to spot warnings in the middl
 Example usage:
 
     mvn clean install | colorlog
-    
-== Windows
 
-Install {ruby}[http://rubyinstaller.org/]
+Install ruby. If on windows go to {ruby installer}[http://rubyinstaller.org/]
 
 Once installed
 
-    gem install windows-pr win32console
+    gem install colorlog 
+
+Or on windows
+
+    gem install colorlog windows-pr win32console
     
-To have colors
-
-Then, create somewhere in your path, atl.bat file with content:
-
-    @echo off
-    ruby c:/path/to/script/colorlog %*
-
 You can then use
 
     mvn clean install | colorlog
