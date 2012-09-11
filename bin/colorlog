@@ -15,12 +15,12 @@ Usage: #{executable_name} [options] filename
 
 "
 
-  options[:green] = "success"
+  options[:green] = /success/i
   opts.on('-g', '--green RegExp', 'RegExp that matched will turn the line green') do |green|
     options[:green] = green
   end
 
-  options[:yellow] = "warning"
+  options[:yellow] = /warning/i
   opts.on('-y','--yellow RegExp', 'RegExp that matched will turn the line yellow') do |yellow|
     options[:yellow] = yellow
   end
@@ -36,8 +36,8 @@ option_parser.parse!
 
 def color_print(line, options)
 
-  success_check = Regexp.new(options[:green], Regexp::IGNORECASE)
-  warning_check = Regexp.new(options[:yellow], Regexp::IGNORECASE)
+  success_check = Regexp.new(options[:green])
+  warning_check = Regexp.new(options[:yellow])
   error_check = Regexp.new(options[:red])
 
   color = :default
