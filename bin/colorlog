@@ -15,18 +15,50 @@ Usage: #{executable_name} [options] filename
 
 "
 
+  COLORS = [
+      :black,
+      :red,
+      :green,
+      :yellow,
+      :blue,
+      :magenta,
+      :cyan,
+      :white,
+      :default
+  ]
+
+  options[:success_color] = :green
+  opts.on( '--success-color COLOR', COLORS, 'color to use when success matches ' + COLORS.map{|color| color.id2name}.to_s) do |success_color|
+    options[:success_color] = success_color
+  end
+
+  options[:warning_color] = :yellow
+  opts.on( '--warning-color COLOR', COLORS, 'color to use when warning matches ' + COLORS.map{|color| color.id2name}.to_s) do |warning_color|
+    options[:warning_color] = warning_color
+  end
+
+  options[:error_color] = :red
+  opts.on( '--error-color COLOR', COLORS, 'color to use when error matches ' + COLORS.map{|color| color.id2name}.to_s) do |error_color|
+    options[:error_color] = error_color
+  end
+
+  options[:default_color] = :default
+  opts.on( '--default-color COLOR', COLORS, 'color to use when no match is found ' + COLORS.map{|color| color.id2name}.to_s) do |default_color|
+    options[:default_color] = default_color
+  end
+
   options[:success] = /success/i
-  opts.on('-s', '--success RegExp', Regexp, 'RegExp that matched will turn the line green  (default ' + options[:success].inspect + ')') do |success|
+  opts.on('-s', '--success REGEXP', Regexp, 'RegExp that matched will turn the line green  (default ' + options[:success].inspect + ')') do |success|
     options[:success] = success
   end
 
   options[:warning] = /warning/i
-  opts.on('-w', '--warning RegExp', Regexp, 'RegExp that matched will turn the line yellow (default ' + options[:warning].inspect + ')') do |warning|
+  opts.on('-w', '--warning REGEXP', Regexp, 'RegExp that matched will turn the line yellow (default ' + options[:warning].inspect + ')') do |warning|
     options[:warning] = warning
   end
 
   options[:error] = /^(?:(?!\bTests\b).)*(?:failure|error).*$/i
-  opts.on('-e', '--error RedExp', Regexp, 'RegExp that matched will turn the line red    (default ' + options[:error].inspect + ')') do |error|
+  opts.on('-e', '--error REGEXP', Regexp, 'RegExp that matched will turn the line red    (default ' + options[:error].inspect + ')') do |error|
     options[:error] = error
   end
 
@@ -40,16 +72,16 @@ def color_print(line, options)
   warning_check = Regexp.new(options[:warning])
   error_check = Regexp.new(options[:error])
 
-  color = :default
+  color = options[:default_color]
 
   if line =~ success_check
-    color = :green
+    color = options[:success_color]
   end
   if  line =~ warning_check
-    color = :yellow
+    color = options[:warning_color]
   end
   if  line =~ error_check
-    color = :red
+    color = options[:error_color]
   end
   printf("%s".foreground(color), line)
 
