@@ -2,14 +2,31 @@
 
 require 'optparse'
 require 'rainbow'
+require 'yaml'
 
-options = {}
+options = {
+    success_color: :green,
+    warning_color: :yellow,
+    error_color: :red,
+    default_color: :default,
+    success: /success/i,
+    warning: /warning/i,
+    error: /^(?:(?!\bTests\b).)*(?:failure|error).*$/i
+
+}
+CONFIG_FILE = File.join(ENV['HOME'], '.colorlog.rc.yaml')
+if File.exists? CONFIG_FILE
+  config_options = YAML.load_file(CONFIG_FILE)
+  options.merge!(config_options)
+else
+  File.open(CONFIG_FILE, 'w') { |file| YAML::dump(options, file) }
+  STDERR.puts "Initialized configuration file in #{CONFIG_FILE}"
+end
+
 option_parser = OptionParser.new do |opts|
   executable_name = File.basename($PROGRAM_NAME)
   opts.banner = "Read a file and color the lines in " +
-      "green".foreground(:green) + ", " +
-      "yellow".foreground(:yellow) + " or " +
-      "red".foreground(:red) + " based on the content of the line
+      "different color depending on the content of the line matching different Regexp.
 
 Usage: #{executable_name} [options] filename
 
@@ -27,37 +44,30 @@ Usage: #{executable_name} [options] filename
       :default
   ]
 
-  options[:success_color] = :green
-  opts.on( '--success-color COLOR', COLORS, 'color to use when success matches ' + COLORS.map{|color| color.id2name}.to_s) do |success_color|
+  opts.on('--success-color COLOR', COLORS, 'color to use when success matches ' + COLORS.map { |color| color.id2name }.to_s) do |success_color|
     options[:success_color] = success_color
   end
 
-  options[:warning_color] = :yellow
-  opts.on( '--warning-color COLOR', COLORS, 'color to use when warning matches ' + COLORS.map{|color| color.id2name}.to_s) do |warning_color|
+  opts.on('--warning-color COLOR', COLORS, 'color to use when warning matches ' + COLORS.map { |color| color.id2name }.to_s) do |warning_color|
     options[:warning_color] = warning_color
   end
 
-  options[:error_color] = :red
-  opts.on( '--error-color COLOR', COLORS, 'color to use when error matches ' + COLORS.map{|color| color.id2name}.to_s) do |error_color|
+  opts.on('--error-color COLOR', COLORS, 'color to use when error matches ' + COLORS.map { |color| color.id2name }.to_s) do |error_color|
     options[:error_color] = error_color
   end
 
-  options[:default_color] = :default
-  opts.on( '--default-color COLOR', COLORS, 'color to use when no match is found ' + COLORS.map{|color| color.id2name}.to_s) do |default_color|
+  opts.on('--default-color COLOR', COLORS, 'color to use when no match is found ' + COLORS.map { |color| color.id2name }.to_s) do |default_color|
     options[:default_color] = default_color
   end
 
-  options[:success] = /success/i
   opts.on('-s', '--success REGEXP', Regexp, 'RegExp that matched will turn the line green  (default ' + options[:success].inspect + ')') do |success|
     options[:success] = success
   end
 
-  options[:warning] = /warning/i
   opts.on('-w', '--warning REGEXP', Regexp, 'RegExp that matched will turn the line yellow (default ' + options[:warning].inspect + ')') do |warning|
     options[:warning] = warning
   end
 
-  options[:error] = /^(?:(?!\bTests\b).)*(?:failure|error).*$/i
   opts.on('-e', '--error REGEXP', Regexp, 'RegExp that matched will turn the line red    (default ' + options[:error].inspect + ')') do |error|
     options[:error] = error
   end
