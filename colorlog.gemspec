@@ -7,10 +7,10 @@ Gem::Specification.new do |s|
   s.authors     = ["Nicolas Hurion"]
   s.homepage    = "https://github.com/nhurion/colorlog"
   s.summary     = %q{An helper to color logs based on regexp}
-  s.description = %q{colorlog allow you to read a file with some lines colored in red, green and yellow based on regexp}
+  s.description = %q{colorlog allow you to read a file with some lines colored based on regexp three different regexp}
 
-  s.files       = ["bin/colorlog"]
-  s.executables = ["colorlog"]
+  s.files       = %w(bin/colorlog)
+  s.executables = %w(colorlog)
 
   s.add_dependency("rainbow")
   s.add_development_dependency("rake", "~> 0.9.2")

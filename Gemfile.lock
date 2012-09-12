@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    colorlog (0.0.3)
+    colorlog (0.0.4)
       rainbow
 
 GEM
