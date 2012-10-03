@@ -17,25 +17,35 @@ COLORS = [
 ]
 
 options = {
-    default: {
-        color: :default,
-        regex: //
-    },
-    success: {
-        color: :green,
-        regex: /success/i
-    },
-    warning: {
-        color: :yellow,
-        regex: /warning/i
-    },
-    error: {
-        color: :red,
-        regex: /^(?:(?!\bTests\b).)*(?:failure|error).*$/i
-    },
-    custom1: {
-        color: :blue,
-        regex: /custom1/
+    colors: {
+        default: {
+            color: :default,
+            regex: //
+        },
+        success: {
+            color: :green,
+            regex: /success/i
+        },
+        warning: {
+            color: :yellow,
+            regex: /warning/i
+        },
+        error: {
+            color: :red,
+            regex: /^(?:(?!\bTests\b).)*(?:failure|error).*$/i
+        },
+        custom1: {
+            color: :blue,
+            regex: /custom1/
+        },
+        custom2: {
+            color: :magenta,
+            regex: /custom2/
+        },
+        custom3: {
+            color: :cyan,
+            regex: /custom3/
+        }
     }
 }
 
@@ -54,43 +64,61 @@ option_parser = OptionParser.new do |opts|
       "different color depending on the content of the line matching different Regexp.
 
 Usage: #{executable_name} [options] filename
+       possible colors are: " + COLORS.map { |color| color.id2name }.to_s+"
+       You can change the default values by editing "+CONFIG_FILE+"
 
-"
+  "
 
-  opts.on('--success-color COLOR', COLORS, 'color to use when success matches ' + COLORS.map { |color| color.id2name }.to_s) do |success_color|
-    options[:success][:color] = success_color
+  opts.on('--default-color COLOR', COLORS, 'color to use when no match is found (' + options[:colors][:default][:color].id2name + ')') do |default_color|
+    options[:colors][:default][:color] = default_color
   end
 
-  opts.on('--warning-color COLOR', COLORS, 'color to use when warning matches ' + COLORS.map { |color| color.id2name }.to_s) do |warning_color|
-    options[:warning][:color] = warning_color
+  opts.on('-s', '--success REGEXP', Regexp, 'RegExp that matched will turn the line in --success-color  (' + options[:colors][:success][:regex].inspect + ')') do |success|
+    options[:colors][:success][:regex] = success
   end
 
-  opts.on('--error-color COLOR', COLORS, 'color to use when error matches ' + COLORS.map { |color| color.id2name }.to_s) do |error_color|
-    options[:error][:color] = error_color
+  opts.on('--success-color COLOR', COLORS, 'color to use when line matches success (' + options[:colors][:success][:color].id2name + ')') do |success_color|
+    options[:colors][:success][:color] = success_color
   end
 
-  opts.on('--default-color COLOR', COLORS, 'color to use when no match is found ' + COLORS.map { |color| color.id2name }.to_s) do |default_color|
-    options[:default][:color] = default_color
+  opts.on('-w', '--warning REGEXP', Regexp, 'RegExp that matched will turn the line in --warning-color (' + options[:colors][:warning][:regex].inspect + ')') do |warning|
+    options[:colors][:warning][:regex] = warning
   end
 
-  opts.on('-cc1','--custom-color1 COLOR', COLORS, 'color to use when custom1 match is found ' + COLORS.map { |color| color.id2name }.to_s) do |custom_color1|
-    options[:custom1][:color] = custom_color1
+  opts.on('--warning-color COLOR', COLORS, 'color to use when line matches warning (' + options[:colors][:warning][:color].id2name + ')') do |warning_color|
+    options[:colors][:warning][:color] = warning_color
   end
 
-  opts.on('-s', '--success REGEXP', Regexp, 'RegExp that matched will turn the line green  (default ' + options[:success].inspect + ')') do |success|
-    options[:success][:regex] = success
+  opts.on('-e', '--error REGEXP', Regexp, 'RegExp that matched will turn the line in --error-color    (' + options[:colors][:error][:regex].inspect + ')') do |error|
+    options[:colors][:error][:regex] = error
   end
 
-  opts.on('-w', '--warning REGEXP', Regexp, 'RegExp that matched will turn the line yellow (default ' + options[:warning].inspect + ')') do |warning|
-    options[:warning][:regex] = warning
+  opts.on('--error-color COLOR', COLORS, 'color to use when line matches error (' + options[:colors][:error][:color].id2name + ')') do |error_color|
+    options[:colors][:error][:color] = error_color
   end
 
-  opts.on('-e', '--error REGEXP', Regexp, 'RegExp that matched will turn the line red    (default ' + options[:error].inspect + ')') do |error|
-    options[:error][:regex] = error
+  opts.on('--custom1 REGEXP', Regexp, 'RegExp that matched will turn the line in --custom-color1  (' + options[:colors][:custom1][:regex].inspect + ')') do |custom|
+    options[:colors][:custom1][:regex] = custom
   end
 
-  opts.on('-c1', '--custom1 REGEXP', Regexp, 'RegExp that matched will turn the line in --custom-color1  (default ' + options[:custom1].inspect + ')') do |custom1|
-    options[:custom1] = custom1
+  opts.on('--custom1-color COLOR', COLORS, 'color to use when line matches custom1 (' + options[:colors][:custom1][:color].id2name + ')') do |custom_color|
+    options[:colors][:custom1][:color] = custom_color
+  end
+
+  opts.on('--custom2 REGEXP', Regexp, 'RegExp that matched will turn the line in --custom-color2  (' + options[:colors][:custom2][:regex].inspect + ')') do |custom|
+    options[:colors][:custom2][:regex] = custom
+  end
+
+  opts.on('--custom2-color COLOR', COLORS, 'color to use when line matches custom2 (' + options[:colors][:custom2][:color].id2name + ')') do |custom_color|
+    options[:colors][:custom2][:color] = custom_color
+  end
+
+  opts.on('--custom3 REGEXP', Regexp, 'RegExp that matched will turn the line in --custom-color3  (' + options[:colors][:custom3][:regex].inspect + ')') do |custom|
+    options[:colors][:custom3][:regex] = custom
+  end
+
+  opts.on('--custom3-color COLOR', COLORS, 'color to use when line matches custom3 (' + options[:colors][:custom3][:color].id2name + ')') do |custom_color|
+    options[:colors][:custom3][:color] = custom_color
   end
 
 end
@@ -98,9 +126,9 @@ end
 option_parser.parse!
 
 def color_print(line, options)
-  actual_color = options[:default][:color]
+  actual_color = options[:colors][:default][:color]
 
-  options.each do |key, value|
+  options[:colors].each do |key, value|
     regexp = Regexp.new(value[:regex])
     color = value[:color]
     if line =~ regexp
