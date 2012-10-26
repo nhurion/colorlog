@@ -40,6 +40,10 @@ And if it is too long for you, create a file mvnc.bat that you put somewhere in 
     @echo off
     mvn %* | colorlog
 
+And you can then use
+
+    mvnc clean install
+
 See help for usage
 
     colorlog --help
