@@ -35,6 +35,11 @@ You can then use
 
     mvn clean install | colorlog
 
+And if it is too long for you, create a file mvnc.bat that you put somewhere in your path with the following content:
+
+    @echo off
+    mvn %* | colorlog
+
 See help for usage
 
     colorlog --help
