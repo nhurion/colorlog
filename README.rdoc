@@ -4,7 +4,7 @@ Author::  Nicolas Hurion
 Copyright::  Copyright (c) 2012 by Nicolas Hurion
 License:: Distribute under the Apache License
 
-== Color log
+== Color log {<img src="https://badge.fury.io/rb/colorlog.png" alt="Gem Version" />}[http://badge.fury.io/rb/colorlog]
 
 Color log is a simple tool that will take a file and display it, with some lines colored in three different colors,
 based on some regular expression.
