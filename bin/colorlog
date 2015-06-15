@@ -50,12 +50,16 @@ options = {
 }
 
 CONFIG_FILE = File.join(ENV['HOME'], '.colorlog.rc.yaml')
-if File.exists? CONFIG_FILE
-  config_options = YAML.load_file(CONFIG_FILE)
-  options.merge!(config_options)
-else
-  File.open(CONFIG_FILE, 'w') { |file| YAML::dump(options, file) }
-  STDERR.puts "Initialized configuration file in #{CONFIG_FILE}"
+begin
+  if File.exists? CONFIG_FILE
+    config_options = YAML.load_file(CONFIG_FILE)
+    options.merge!(config_options)
+  else
+    File.open(CONFIG_FILE, 'w') { |file| YAML::dump(options, file) }
+    STDERR.puts "Initialized configuration file in #{CONFIG_FILE}"
+  end
+rescue
+  STDERR.puts "Error accessing file #{CONFIG_FILE}"
 end
 
 option_parser = OptionParser.new do |opts|
@@ -140,6 +144,19 @@ def color_print(line, options)
 
 end
 
+def print_by_chars(str, options)
+  result = ''
+  str.each_byte do |c| 
+    result = result + c.chr
+    if c == 10 || c == 13
+      color_print(result, options)
+      result = ''
+    end
+  end
+  color_print(result, options)
+end
+
+
 filename = ARGV.shift
 
 if filename.nil?
@@ -148,8 +165,10 @@ if filename.nil?
     exit 1
   end
 
-  ARGF.each do |line|
-    color_print(line, options)
+  begin
+    print_by_chars(ARGF, options)
+  rescue Interrupt
+    # exit gracefully.
   end
 else
   File.open(File.expand_path(filename), 'r') do |file|
